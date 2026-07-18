@@ -1,0 +1,102 @@
+package org.backingapplication;
+
+public class ATM {
+	
+	public static  int total_transaction;
+	static {
+		total_transaction=0;
+		System.out.println("ATM system Initated");
+	}
+	 
+	public static void performTransaction(Bankaccount  account,String type,double amount) {
+		 
+		switch(type.toLowerCase()) {
+		case "withdraw":
+			account.withdraw(amount);
+			total_transaction++;
+			break;
+	
+		case"deposit":
+			account.deposit(amount);
+			total_transaction++;
+			break;
+	default:
+		System.out.println("Inavild Transaction Type");
+		
+		}
+	}
+	public static void main(String[] args) {
+		
+	}
+
+}
+// second 2 
+package org.backingapplication;
+
+public abstract class Bankaccount {
+ protected String accountNumber;
+ protected String accountHolderName;
+ protected double balance;
+ public Bankaccount(String accountNumber, String accountHolderName, double balance) {
+	//super();
+	this.accountNumber = accountNumber;
+	this.accountHolderName = accountHolderName;
+	this.balance = balance;
+ } 
+ 
+ public abstract void withdraw(double amount);
+ public abstract void deposit(double amount);
+  
+ public void displayBalnce() {
+	 System.out.println("Account Number "+accountNumber);
+	 System.out.println("Account Holder Name "+accountHolderName);
+	 System.out.println("Current Balance "+balance);
+ }
+}
+// 3 page 
+package org.backingapplication;
+
+public class BankDriver {
+    public static void main(String[] args) {
+        Bankaccount ba = new SavingsAccount("9998435","rakesh",100000);
+        
+        ATM.performTransaction(ba, "withdraw",800);
+        ba.displayBalnce();
+        
+        System.out.println("-----------");
+        
+        ATM.performTransaction(ba,"deposit", 1000.00);
+        ba.displayBalnce();
+        
+        System.out.println("Total transaction ::"+ATM.total_transaction);
+    }
+}
+// 4 page 
+package org.backingapplication;
+
+public class SavingsAccount extends Bankaccount{
+
+    public SavingsAccount(String accountNumber, String accountHolderName, double balance) {
+		super(accountNumber, accountHolderName, balance);
+	
+	}
+
+	private static final double MIN_BALANCE = 500;
+
+    @Override
+    public void withdraw(double amount) {
+
+        if (balance - amount >= MIN_BALANCE) {
+            balance = balance - amount;   // ❗ actual deduction missing tha
+            System.out.println("Withdrawal amount of " + amount + " is successful");
+        } else {
+            System.out.println("Insufficient Funds");
+        }
+    }
+
+    @Override
+    public void deposit(double amount) {
+        balance = balance + amount;
+        System.out.println("Deposited " + amount + " in your account");
+    }
+}
