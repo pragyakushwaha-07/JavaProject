@@ -1,0 +1,150 @@
+package com.pragya.userapp;
+import java.util.Scanner;
+public class MainApp {
+	public static void main(String[] args) {
+		 
+		Scanner sc = new Scanner(System.in);
+		UserService service = new UserService();
+		while(true) {
+			
+		System.out.println("\n========USER APP MENU/ =====");
+		System.out.println("1.Register");
+		System.out.println("2.Login");
+		System.out.println("3.show All user (for Demo");
+		System.out.println("4.Exit");
+		System.out.println("Enter your choice");
+		
+		   int choice = sc.nextInt();
+		   sc.nextLine();
+		   
+		   switch (choice) {
+		   case 1:
+			   System.out.println("Enter UserName");
+			   String username =sc.nextLine();
+			   
+			   System.out.println("Enter the password"); 
+			   String password =sc.nextLine();
+			   
+			   System.out.println("Enter the email"); 
+			   String email =sc.nextLine();
+			   
+			   String regMsg = service.registrationUser(username , password, email);
+		       System.out.println(regMsg);
+		       break;
+		       
+		       
+		   case 2:
+			   
+			   System.out.println("Enter UserName");
+			   String uname =sc.nextLine();
+			   
+			   System.out.println("Enter the password"); 
+			   String pass =sc.nextLine();
+			   
+			   String loginMsg = service.loginUser(uname, pass);
+			   System.out.println(loginMsg);
+			   break;
+			   
+		   case 3:
+			   service.showAll();
+			   break;
+			   
+			   
+		   case 4:
+			   System.out.println("Exiting the Application .....thankyou");
+			   sc.close();
+			   System.exit(0);
+			   
+			   default:
+				   System.out.println("Invaild choice Please Try Again");
+			   
+		   }
+		}
+	}
+
+}
+
+// 2 page 
+package com.pragya.userapp;
+
+public class User {
+	private String username;
+	private String Password;
+	private String email;
+	
+// constructor
+	 public User(String username, String password , String email) {
+
+		 this.username= username;
+		 this.Password= password;
+		 this.email= email;
+		 
+	 }
+	 //getters 
+ 
+	public String getUsername() {
+		return username;
+		
+	}
+	 public String getpassword() {
+		 return Password;
+	 }
+	 
+	 public String getemail() {
+		 return email;
+	 }
+	 
+
+}
+// 3 page 
+package com.pragya.userapp;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class UserService {
+
+    // List to store registered users
+    private List<User> users = new ArrayList<>();
+
+    // Registration method
+    public String registrationUser(String username, String password, String email) {
+
+        // check if username already exists
+        for (User user : users) {
+            if (user.getUsername().equalsIgnoreCase(username)) {
+                return "Username already taken! Please try another.";
+            }
+        }
+
+        // create and add new user
+        users.add(new User(username, password, email));
+        return "Registration Successful";
+    }
+
+    // Login method
+    public String loginUser(String username, String password) {
+        for (User user : users) {
+            if (user.getUsername().equalsIgnoreCase(username)
+                    && user.getpassword().equals(password)) {
+                return "Login Successful! Welcome, " + username;
+            }
+        }
+        return "Invalid username or password";
+    }
+
+    // Display all registered users
+    public void showAll() {
+
+        if (users.isEmpty()) {
+            System.out.println("No registered users yet");
+        } else {
+            System.out.println("\n------- Registered Users ----------");
+            for (User user : users) {
+                System.out.println("Username: " + user.getUsername() + 
+                                   " | Email: " + user.getemail());
+            }
+        }
+    }
+}
+
